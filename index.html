@@ -1,116 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simple Flappy Bird</title>
+    <title>Flappy Bird</title>
     <style>
+        body {
+            margin: 0;
+            text-align: center;
+            background: #ffffff;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
         canvas {
-            border: 1px solid black;
+            border: 4px solid black;
             display: block;
-            margin: auto;
-            background: lightblue;
+            margin: 20px auto;
+            background: skyblue;
+            image-rendering: pixelated;
         }
     </style>
 </head>
 <body>
 
-<canvas id="canvas" width="400" height="500"></canvas>
+<h2>Flappy Bird Tuff</h2>
 
-<script>
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+<canvas id="canvas" width="1000" height="600"></canvas>
 
-let block = {
-    x: 50,
-    y: 200,
-    width: 30,
-    height: 30,
-    velocity: 0,
-    gravity: 0.5,
-    jump: -8
-};
-
-let pipes = [];
-let gameOver = false;
-
-document.addEventListener("keydown", function(e){
-    if(e.code === "Space"){
-        block.velocity = block.jump;
-    }
-});
-
-function createPipe(){
-    let topHeight = Math.random() * 250;
-    pipes.push({
-        x: canvas.width,
-        top: topHeight,
-        gap: 120
-    });
-}
-
-function update(){
-    if(gameOver) return;
-
-    block.velocity += block.gravity;
-    block.y += block.velocity;
-
-    if(block.y + block.height > canvas.height){
-        gameOver = true;
-    }
-
-    for(let i=0;i<pipes.length;i++){
-        pipes[i].x -= 2;
-
-        if(
-            block.x + block.width > pipes[i].x &&
-            block.x < pipes[i].x + 50 &&
-            (block.y < pipes[i].top ||
-            block.y + block.height > pipes[i].top + pipes[i].gap)
-        ){
-            gameOver = true;
-        }
-    }
-
-    if(frames % 120 === 0){
-        createPipe();
-    }
-}
-
-function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    ctx.fillStyle = "yellow";
-    ctx.fillRect(block.x, block.y, block.width, block.height);
-
-    ctx.fillStyle = "green";
-
-    for(let i=0;i<pipes.length;i++){
-        ctx.fillRect(pipes[i].x,0,50,pipes[i].top);
-        ctx.fillRect(
-            pipes[i].x,
-            pipes[i].top + pipes[i].gap,
-            50,
-            canvas.height
-        );
-    }
-
-    if(gameOver){
-        ctx.fillStyle = "red";
-        ctx.font = "30px Arial";
-        ctx.fillText("Game Over",120,250);
-    }
-}
-
-let frames = 0;
-
-function gameLoop(){
-    update();
-    draw();
-    frames++;
-    requestAnimationFrame(gameLoop);
-}
-
-gameLoop();
-</script>
+<script src="flappy.js"></script>
 
 </body>
 </html>
